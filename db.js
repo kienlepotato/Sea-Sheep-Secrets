@@ -1,16 +1,13 @@
-import sqlite3 from 'sqlite3';
-sqlite3.verbose();
+import Database from 'better-sqlite3';
 
-const db = new sqlite3.Database('./secrets.db');
+const db = new Database('secrets.db');
 
-db.serialize(() => {
-  db.run(`
-    CREATE TABLE IF NOT EXISTS secrets (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      content TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
-});
+db.exec(`
+  CREATE TABLE IF NOT EXISTS secrets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    content TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  )
+`);
 
 export default db;

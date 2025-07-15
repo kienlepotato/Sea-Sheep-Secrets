@@ -11,29 +11,38 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Home page with form
 app.get('/', (req, res) => {
   res.render('index');
 });
 
+// Handle secret submission
 app.post('/submit', (req, res) => {
   const { secret } = req.body;
   if (!secret || secret.length > 500) {
     return res.send('Secret is required and must be under 500 characters.');
   }
 
-  db.run('INSERT INTO secrets (content) VALUES (?)', [secret], err => {
-    if (err) return res.status(500).send('Error saving secret.');
+  try {
+    db.prepare('INSERT INTO secrets (content) VALUES (?)').run(secret);
     res.redirect('/secrets');
-  });
+  } catch (err) {
+    console.error('Error saving secret:', err);
+    res.status(500).send('Failed to save secret.');
+  }
 });
 
+// Display stored secrets
 app.get('/secrets', (req, res) => {
-  db.all('SELECT * FROM secrets ORDER BY created_at DESC LIMIT 20', (err, rows) => {
-    if (err) return res.status(500).send('Error fetching secrets.');
-    res.render('secrets', { secrets: rows });
-  });
+  try {
+    const secrets = db.prepare('SELECT * FROM secrets ORDER BY created_at DESC LIMIT 20').all();
+    res.render('secrets', { secrets });
+  } catch (err) {
+    console.error('Error retrieving secrets:', err);
+    res.status(500).send('Failed to load secrets.');
+  }
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:\${PORT}\ `);
+  console.log(`🔐 Leaf Sheep Secret Keeper running at http://localhost:${PORT}`);
 });
