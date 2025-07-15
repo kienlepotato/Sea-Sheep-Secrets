@@ -1,0 +1,40 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #e3fcec;
+  text-align: center;
+  padding: 2rem;
+}
+
+h1 {
+  color: #2c7a7b;
+}
+
+textarea {
+  width: 300px;
+  height: 100px;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #38b2ac;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+a {
+  display: block;
+  margin-top: 2rem;
+  color: #2b6cb0;
+}
+
+.sheep {
+  max-width: 200px;
+  margin: 1rem;
+  border-radius: 1rem;
+}
