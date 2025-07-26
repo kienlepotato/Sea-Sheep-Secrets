@@ -19,8 +19,8 @@ app.get('/', (req, res) => {
 // Handle secret submission
 app.post('/submit', (req, res) => {
   const { secret } = req.body;
-  if (!secret || secret.length > 500) {
-    return res.send('Secret is required and must be under 500 characters.');
+  if (!secret || secret.length > 10000) {
+    return res.send('Secret is required and must be under 10000 characters.');
   }
 
   try {
