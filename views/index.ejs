@@ -6,8 +6,12 @@
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
+
+ <%- include('partials/navbar') %>
+
+
   <h1>🐑 Whisper to the Leaf Sheep</h1>
-  <img src="leafsheep.jpg" alt="Leaf Sheep" class="sheep"/>
+  <img src="leafsheeptalk.jpg" alt="Leaf Sheep" class="sheep"/>
   <form method="POST" action="/submit">
     <textarea name="secret" placeholder="Tell me your secret..." required></textarea>
     <button type="submit">Tell the Leaf Sheep</button>

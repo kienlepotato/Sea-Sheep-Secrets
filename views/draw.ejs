@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leaf Sheep Drawing Board</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+ <%- include('partials/navbar') %>
+   
+
+<h1>🎨 Draw with the Leaf Sheep</h1>
+
+<canvas id="canvas" width="400" height="400"
+        style="border:1px solid #ccc;"></canvas>
+
+<br><br>
+
+<button onclick="saveDrawing()">Save Drawing</button>
+<a href="/gallery">View drawing board</a>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let drawing = false;
+
+canvas.addEventListener('mousedown', (e) => {
+  drawing = true;
+  ctx.beginPath();
+  ctx.moveTo(e.offsetX, e.offsetY);
+});
+
+canvas.addEventListener('mouseup', () => {
+  drawing = false;
+  ctx.beginPath();
+});
+
+canvas.addEventListener('mousemove', draw);
+
+function draw(e) {
+  if (!drawing) return;
+
+  ctx.lineWidth = 3;
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = '#2c7a7b';
+
+  ctx.lineTo(e.offsetX, e.offsetY);
+  ctx.stroke();
+}
+
+/* ========= VALIDATION ========= */
+
+function isCanvasBlank() {
+  const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+  return !pixels.some(channel => channel !== 0);
+}
+
+function saveDrawing() {
+  if (isCanvasBlank()) {
+    alert('Please draw something first 🐑');
+    return;
+  }
+
+  const image = canvas.toDataURL('image/png');
+
+  const MAX_SIZE = 200_000;
+  if (image.length > MAX_SIZE) {
+    alert('Drawing is too large. Try simpler lines.');
+    return;
+  }
+
+  fetch('/drawings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ image })
+  })
+  .then(res => {
+    if (!res.ok) throw new Error();
+    window.location.href = '/gallery';
+  })
+  .catch(() => {
+    alert('Failed to save drawing.');
+  });
+}
+</script>
+
+
+</body>
+</html>

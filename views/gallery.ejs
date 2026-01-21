@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leaf Sheep Drawing Board</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #f0fdfd;
+      color: #2c7a7b;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 15px;
+      justify-items: center;
+      margin-bottom: 40px;
+    }
+
+    .gallery-grid img {
+      width: 180px;
+      height: 180px;
+      object-fit: contain;
+      border: 2px solid #2c7a7b;
+      border-radius: 10px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+
+    .gallery-grid img:hover {
+      transform: scale(1.05);
+    }
+
+    .slideshow {
+      margin: 0 auto 30px;
+      width: 300px;
+      height: 300px;
+      border: 3px solid #2c7a7b;
+      border-radius: 15px;
+      overflow: hidden;
+      background-color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .slideshow img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    a.button {
+      display: inline-block;
+      margin: 10px;
+      padding: 10px 20px;
+      background-color: #2c7a7b;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.2s;
+    }
+
+    a.button:hover {
+      background-color: #1b4f4f;
+    }
+  </style>
+</head>
+<body>
+
+ <%- include('partials/navbar') %>
+
+<h1>🖼️ Shared Drawing Board</h1>
+
+<!-- Random slideshow window -->
+<div class="slideshow" id="slideshow">
+  <% if (drawings.length > 0) { %>
+    <img src="<%= drawings[0].image %>" id="slide-image" />
+  <% } else { %>
+    <p>No drawings yet 🐑</p>
+  <% } %>
+</div>
+
+<!-- Gallery grid -->
+<div class="gallery-grid">
+  <% drawings.forEach(d => { %>
+    <img src="<%= d.image %>" />
+  <% }) %>
+</div>
+
+<a href="/draw" class="button">Create a drawing</a>
+
+<script>
+  // Random slideshow logic
+  const drawings = <%- JSON.stringify(drawings) %>;
+  if (drawings.length > 1) {
+    const slideImage = document.getElementById('slide-image');
+    setInterval(() => {
+      const randomIndex = Math.floor(Math.random() * drawings.length);
+      slideImage.src = drawings[randomIndex].image;
+    }, 3000); // change every 3 seconds
+  }
+</script>
+
+</body>
+</html>

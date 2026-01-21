@@ -8,6 +8,18 @@ db.exec(`
     content TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )
+
+  
 `);
 
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS drawings (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  image TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+  
+`);
 export default db;
